@@ -41,6 +41,7 @@ def poker(hands):
     "Return a list of winning hands: poker([hand,...]) => [hand,...]"
     return allmax(hands, key=hand_rank)
 
+
 def allmax(iterable, key=None):
     "Return a list of all items equal to the max of the iterable."
     result, maxval = [], None
@@ -51,9 +52,11 @@ def allmax(iterable, key=None):
             result, maxval = [x], xval
         elif xval == maxval:
             result.append(x)
-    return result    
+    return result
+
 
 def hand_rank(hand):
+    print(hand)
     ranks = card_ranks(hand)
     if straight(ranks) and flush(hand):            # straight flush
         return (8, max(ranks))
@@ -72,7 +75,7 @@ def hand_rank(hand):
     elif kind(2, ranks):                           # kind
         return (1, kind(2, ranks), ranks)
     else:                                          # high card
-        return (0, hand)
+        return (0, ranks)
 
 # def test():
 #     "Test cases for the functions in poker program"
@@ -97,13 +100,16 @@ def straight(ranks):
     s = set(ranks)
 
     # T J Q K A
-    
+
     if len(s) == 5:
         # if s has 14
         # A 2 3 4 5
         if 14 in s and min(s) == 2:
             s.remove(14)
             s.add(1)
+            #  这里比较大小的时候可能出问题， 需要修改ranks数值 14->1
+            #  test(&["2H 3C 4D 5D 6H", "4S AH 3S 2D 5H"], &["2H 3C 4D 5D 6H"])
+            ranks[0] = 1
         return max(s)-min(s) == 4
     else:
         return False
@@ -237,41 +243,42 @@ def card_ranks(hand):
 #     assert straight(card_ranks(al)) == True
 #     return 'tests pass'
 
-# def test():
-#     "Test cases for the functions in poker program."
-#     sf1 = "6C 7C 8C 9C TC".split() # Straight Flush
-#     sf2 = "6D 7D 8D 9D TD".split() # Straight Flush
-#     fk = "9D 9H 9S 9C 7D".split() # Four of a Kind
-#     fh = "TD TC TH 7C 7D".split() # Full House
-#     assert poker([sf1, sf2, fk, fh]) == [sf1, sf2] 
-#     return 'tests pass'
+def test():
+    "Test cases for the functions in poker program."
+    sf1 = "6C 7C 8C 9C TC".split()  # Straight Flush
+    sf2 = "6D 7D 8D 9D TD".split()  # Straight Flush
+    fk = "9D 9H 9S 9C 7D".split()  # Four of a Kind
+    fh = "TD TC TH 7C 7D".split()  # Full House
+    assert poker([sf1, sf2, fk, fh]) == [sf1, sf2]
+    return 'tests pass'
 
-# print(test())
+
+print(test())
 
 # -----------
 # User Instructions
-# 
-# Write a function, deal(numhands, n=5, deck), that 
+#
+# Write a function, deal(numhands, n=5, deck), that
 # deals numhands hands with n cards each.
 #
 
-import random # this will be a useful library for shuffling
+# import random # this will be a useful library for shuffling
 
-# This builds a deck of 52 cards. If you are unfamiliar
-# with this notation, check out Andy's supplemental video
-# on list comprehensions (you can find the link in the 
-# Instructor Comments box below).
+# # This builds a deck of 52 cards. If you are unfamiliar
+# # with this notation, check out Andy's supplemental video
+# # on list comprehensions (you can find the link in the
+# # Instructor Comments box below).
 
-mydeck = [r+s for r in '23456789TJQKA' for s in 'SHDC'] 
+# mydeck = [r+s for r in '23456789TJQKA' for s in 'SHDC']
 
-def deal(numhands, n=5, deck=mydeck):
-    # Your code here.
-    random.shuffle(deck)
-    ans =[]
-    for i in range(numhands):
-        ans.append([])
-        for j in range(n*i,n*(i+1)):
-            ans[i].append(deck[j])
-    return ans
+# def deal(numhands, n=5, deck=mydeck):
+#     # Your code here.
+#     random.shuffle(deck)
+#     ans =[]
+#     for i in range(numhands):
+#         ans.append([])
+#         for j in range(n*i,n*(i+1)):
+#             ans[i].append(deck[j])
+#     return ans
 
-print(deal(3,2))
+# print(deal(3,2))
